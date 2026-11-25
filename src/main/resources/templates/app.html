@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Explore Projects | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<div id="app-shell">
+    <header class="topbar">
+        <a class="brand" href="/app">ResearchConnect</a>
+        <nav class="main-nav" aria-label="Primary navigation">
+            <a class="active" href="/app">Explore Projects</a>
+            <a href="/my-projects">My Projects</a>
+            <a href="/create-project">Create Project</a>
+        </nav>
+        <span class="profile-link" id="profile-link">Profile</span>
+    </header>
+
+    <main class="page-shell">
+        <section class="feed-heading">
+            <div>
+                <p class="eyebrow">PROJECT DIRECTORY</p>
+                <h1>Explore research</h1>
+            </div>
+            <a class="button button-dark button-inline" href="/create-project">Create project</a>
+        </section>
+
+        <section class="filters" aria-label="Project filters">
+            <label class="search-field">
+                <span>Search</span>
+                <input id="search" type="search" placeholder="Title, keyword or skill">
+            </label>
+            <label>
+                <span>Department</span>
+                <select id="department-filter">
+                    <option value="">All departments</option>
+                    <option>Computer Science</option>
+                    <option>Electrical Engineering</option>
+                    <option>Mechanical Engineering</option>
+                    <option>Civil Engineering</option>
+                    <option>Biotechnology</option>
+                    <option>Chemical Engineering</option>
+                    <option>Mathematics</option>
+                </select>
+            </label>
+            <label>
+                <span>Category</span>
+                <select id="category-filter">
+                    <option value="">All categories</option>
+                    <option>Artificial Intelligence</option>
+                    <option>Software Systems</option>
+                    <option>Biotechnology</option>
+                    <option>Robotics</option>
+                    <option>Materials</option>
+                    <option>Sustainability</option>
+                    <option>Social Sciences</option>
+                </select>
+            </label>
+            <label>
+                <span>Published by</span>
+                <select id="type-filter">
+                    <option value="">Student & Professor</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="PROFESSOR">Professor</option>
+                </select>
+            </label>
+        </section>
+
+        <p id="feed-error" class="form-error" aria-live="polite"></p>
+        <section id="project-feed" class="project-feed" aria-live="polite"></section>
+    </main>
+</div>
+<script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/projects.js"></script>
+</body>
+</html>

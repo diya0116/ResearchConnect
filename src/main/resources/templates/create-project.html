@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Project | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/app">ResearchConnect</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+        <a href="/app">Explore Projects</a>
+        <a href="/my-projects">My Projects</a>
+        <a class="active" href="/create-project">Create Project</a>
+    </nav>
+    <span class="profile-link" id="profile-link">Profile</span>
+</header>
+
+<main class="page-shell form-page">
+    <header class="section-heading">
+        <p class="eyebrow">NEW OPPORTUNITY</p>
+        <h1 id="form-title">Create project</h1>
+        <p class="muted">Publish a clear opportunity for students and professors to join.</p>
+    </header>
+
+    <form id="project-form" novalidate>
+        <section class="form-section">
+            <h2>Basic information</h2>
+            <div class="form-grid">
+                <label class="full">
+                    Project title
+                    <input name="title" required maxlength="120" placeholder="Concise project title">
+                </label>
+                <label class="full">
+                    Short description
+                    <textarea name="shortDescription" required maxlength="300" rows="3" placeholder="A brief summary for the project feed"></textarea>
+                </label>
+                <label class="full">
+                    Detailed description
+                    <textarea name="description" required rows="7" placeholder="Describe the research question, context and work involved"></textarea>
+                </label>
+                <label>
+                    Category
+                    <select name="category" required>
+                        <option value="">Select category</option>
+                        <option>Artificial Intelligence</option>
+                        <option>Software Systems</option>
+                        <option>Biotechnology</option>
+                        <option>Robotics</option>
+                        <option>Materials</option>
+                        <option>Sustainability</option>
+                        <option>Social Sciences</option>
+                        <option>Other</option>
+                    </select>
+                </label>
+                <label>
+                    Department
+                    <select name="department" required>
+                        <option value="">Select department</option>
+                        <option>Computer Science</option>
+                        <option>Electrical Engineering</option>
+                        <option>Mechanical Engineering</option>
+                        <option>Civil Engineering</option>
+                        <option>Biotechnology</option>
+                        <option>Chemical Engineering</option>
+                        <option>Mathematics</option>
+                        <option>Interdisciplinary</option>
+                    </select>
+                </label>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Project details</h2>
+            <div class="form-grid">
+                <label class="full">
+                    Required skills
+                    <input name="requiredSkills" required maxlength="300" placeholder="Python, Computer Vision, Data Analysis">
+                    <span class="field-help">Separate multiple skills with commas.</span>
+                </label>
+                <label>
+                    Team size
+                    <input name="teamSize" type="number" required min="1" max="100" value="4">
+                </label>
+                <label>
+                    Available positions
+                    <input name="availablePositions" type="number" required min="0" max="100" value="2">
+                </label>
+                <label>
+                    Project duration
+                    <input name="duration" required maxlength="60" placeholder="6 months">
+                </label>
+                <label>
+                    Weekly commitment (hours)
+                    <input name="weeklyCommitment" type="number" required min="1" max="168" value="6">
+                </label>
+                <label>
+                    Expected start date
+                    <input name="expectedStartDate" type="date" required>
+                </label>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Additional information</h2>
+            <div class="form-grid">
+                <label class="full">
+                    Project objectives
+                    <textarea name="objectives" rows="5" maxlength="2000" placeholder="List the main aims and intended outcomes"></textarea>
+                </label>
+                <label class="full">
+                    Requirements / eligibility
+                    <textarea name="requirements" rows="5" maxlength="2000" placeholder="Relevant coursework, experience or eligibility criteria"></textarea>
+                </label>
+            </div>
+        </section>
+
+        <p id="project-error" class="form-error" aria-live="polite"></p>
+        <div class="form-actions">
+            <a class="button button-secondary" href="/app">Cancel</a>
+            <button class="button button-dark" type="submit" id="submit-project">Submit Project</button>
+        </div>
+    </form>
+</main>
+<script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/create-project.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Complete profile | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<main class="auth-layout">
+    <section class="auth-intro">
+        <p class="eyebrow">RESEARCHCONNECT / PROFILE</p>
+        <h1>Make your work findable.</h1>
+        <p class="lead">Tell the research network who you are. You can update these details later.</p>
+    </section>
+    <section class="auth-panel">
+        <p class="eyebrow">FIRST LOGIN</p>
+        <h2>Complete your profile</h2>
+        <form id="profile-form">
+            <label for="role">Role</label>
+            <select id="role" required>
+                <option value="">Select your role</option>
+                <option value="STUDENT">Student</option>
+                <option value="PROFESSOR">Professor</option>
+            </select>
+            <label for="department">Department</label>
+            <input id="department" required maxlength="120">
+            <label for="cohort">Cohort / year <span class="muted">(optional)</span></label>
+            <input id="cohort" maxlength="20" placeholder="For example, BE24">
+            <label for="description">Short profile description <span class="muted">(optional)</span></label>
+            <textarea id="description" rows="4" maxlength="500"></textarea>
+            <button class="button button-dark" type="submit">Save profile</button>
+            <p id="profile-error" class="form-error" aria-live="polite"></p>
+        </form>
+    </section>
+</main>
+<script th:inline="javascript">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/onboarding.js"></script>
+</body>
+</html>

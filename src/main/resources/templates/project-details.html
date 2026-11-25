@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Details | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/app">ResearchConnect</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+        <a class="active" href="/app">Explore Projects</a>
+        <a href="/my-projects">My Projects</a>
+        <a href="/create-project">Create Project</a>
+    </nav>
+    <span class="profile-link" id="profile-link">Profile</span>
+</header>
+<main class="page-shell detail-page">
+    <a class="back-link" href="/app">Back to projects</a>
+    <p id="detail-error" class="form-error" aria-live="polite"></p>
+    <article id="project-detail"></article>
+    <div id="project-management" class="form-actions detail-actions" hidden></div>
+</main>
+<script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/project-details.js"></script>
+</body>
+</html>

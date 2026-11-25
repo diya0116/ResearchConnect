@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Projects | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/app">ResearchConnect</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+        <a href="/app">Explore Projects</a>
+        <a class="active" href="/my-projects">My Projects</a>
+        <a href="/create-project">Create Project</a>
+    </nav>
+    <span class="profile-link" id="profile-link">Profile</span>
+</header>
+<main class="page-shell">
+    <section class="feed-heading">
+        <div>
+            <p class="eyebrow">YOUR WORK</p>
+            <h1>My projects</h1>
+        </div>
+        <a class="button button-dark button-inline" href="/create-project">Create project</a>
+    </section>
+    <p id="my-projects-error" class="form-error" aria-live="polite"></p>
+    <section id="my-projects-list" class="project-feed" aria-live="polite"></section>
+</main>
+<script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/my-projects.js"></script>
+</body>
+</html>
