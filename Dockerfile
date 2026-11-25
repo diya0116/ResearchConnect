@@ -3,6 +3,7 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /workspace
 
 COPY pom.xml ./
+COPY settings.xml /root/.m2/settings.xml
 COPY .mvn/ .mvn/
 RUN mvn -B -ntp dependency:go-offline
 
