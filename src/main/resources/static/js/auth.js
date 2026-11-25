@@ -11,6 +11,7 @@ if (!window.firebaseConfig.apiKey || !window.firebaseConfig.projectId) {
     const app = initializeApp(window.firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
 
     button.addEventListener("click", async () => {
         button.disabled = true;
@@ -22,7 +23,7 @@ if (!window.firebaseConfig.apiKey || !window.firebaseConfig.projectId) {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (!response.ok) {
-                throw new Error("This account is not authorized for ResearchConnect.");
+                throw new Error("Sign in with a verified @thapar.edu Google account.");
             }
             sessionStorage.setItem("researchConnectIdToken", token);
             const account = await response.json();

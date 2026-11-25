@@ -2,6 +2,7 @@ package com.researchconnect.repository;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Comparator;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,13 +92,34 @@ public class FirestoreProjectRepository {
     }
 
     public List<Project> findByOwnerId(String ownerId) throws ExecutionException, InterruptedException {
+        QuerySnapshot snapshot = firestore.collection(COLLECTION)
+                .whereEqualTo("ownerId", ownerId)
+                .get()
+                .get();
         List<Project> owned = new ArrayList<>();
-        for (Project project : findAll()) {
-            if (ownerId.equals(project.ownerId())) {
-                owned.add(project);
+        for (QueryDocumentSnapshot document : snapshot.getDocuments()) {
+            owned.add(fromDocument(document));
+        }
+        owned.sort(Comparator.comparing(Project::createdAt,
+                Comparator.nullsLast(Comparator.naturalOrder())).reversed());
+        return owned;
+    }
+
+    public List<Project> findByIds(Collection<String> projectIds)
+            throws ExecutionException, InterruptedException {
+        List<String> ids = projectIds.stream().filter(id -> id != null && !id.isBlank()).distinct().toList();
+        List<Project> projects = new ArrayList<>();
+        for (int start = 0; start < ids.size(); start += 30) {
+            List<String> batch = ids.subList(start, Math.min(start + 30, ids.size()));
+            QuerySnapshot snapshot = firestore.collection(COLLECTION)
+                    .whereIn(FieldPath.documentId(), batch)
+                    .get()
+                    .get();
+            for (QueryDocumentSnapshot document : snapshot.getDocuments()) {
+                projects.add(fromDocument(document));
             }
         }
-        return owned;
+        return projects;
     }
 
     public int countAcceptedMembers(String projectId) throws ExecutionException, InterruptedException {

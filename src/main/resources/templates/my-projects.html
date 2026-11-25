@@ -11,10 +11,14 @@
     <a class="brand" href="/app">ResearchConnect</a>
     <nav class="main-nav" aria-label="Primary navigation">
         <a href="/app">Explore Projects</a>
+        <a href="/dashboard">Dashboard</a>
         <a class="active" href="/my-projects">My Projects</a>
         <a href="/create-project">Create Project</a>
     </nav>
-    <span class="profile-link" id="profile-link">Profile</span>
+    <div class="topbar-actions">
+        <span class="profile-link" id="profile-link">Profile</span>
+        <button class="profile-link" id="sign-out" type="button">Sign out</button>
+    </div>
 </header>
 <main class="page-shell">
     <section class="feed-heading">
@@ -25,7 +29,9 @@
         <a class="button button-dark button-inline" href="/create-project">Create project</a>
     </section>
     <p id="my-projects-error" class="form-error" aria-live="polite"></p>
-    <section id="my-projects-list" class="project-feed" aria-live="polite"></section>
+    <section id="my-projects-list" class="project-feed" aria-live="polite">
+        <p class="muted">Loading your projects...</p>
+    </section>
 </main>
 <script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
     window.firebaseConfig = {

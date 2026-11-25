@@ -9,6 +9,8 @@ target/
 # Local environment and configuration files
 .env
 .env.*
+.envrc
+*.env.*
 *.env
 *.local
 application-local.*
@@ -24,6 +26,11 @@ application-local.*
 *.pfx
 *.jks
 *.keystore
+*.p8
+*private*key*.json
+*secret*.json
+id_rsa*
+id_ed25519*
 
 # Editor and operating-system temporary files
 .DS_Store

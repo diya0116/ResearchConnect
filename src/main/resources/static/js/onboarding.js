@@ -1,5 +1,8 @@
+import "./firebase-session.js";
+
 const form = document.querySelector("#profile-form");
 const errorElement = document.querySelector("#profile-error");
+const submitButton = form.querySelector('button[type="submit"]');
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -9,6 +12,7 @@ form.addEventListener("submit", async (event) => {
         return;
     }
 
+    submitButton.disabled = true;
     try {
         const response = await fetch("/api/auth/profile", {
             method: "POST",
@@ -24,10 +28,12 @@ form.addEventListener("submit", async (event) => {
             })
         });
         if (!response.ok) {
-            throw new Error("We could not save your profile. Please review the form and try again.");
+            const payload = await response.json().catch(() => null);
+            throw new Error(payload?.message || "We could not save your profile. Please review the form and try again.");
         }
         window.location.href = "/app";
     } catch (error) {
         errorElement.textContent = error.message;
+        submitButton.disabled = false;
     }
 });

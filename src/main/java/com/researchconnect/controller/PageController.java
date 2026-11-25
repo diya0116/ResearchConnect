@@ -56,8 +56,15 @@ public class PageController {
         return "my-projects";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        addFirebaseConfig(model);
+        return "dashboard";
+    }
+
     @GetMapping("/projects")
-    public String projects() {
+    public String projects(Model model) {
+        addFirebaseConfig(model);
         return "app";
     }
 

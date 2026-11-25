@@ -8,8 +8,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -34,20 +36,24 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String idToken = authorization.substring("Bearer ".length()).trim();
+        FirebaseToken token;
         try {
-            FirebaseToken token = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            token = FirebaseAuth.getInstance().verifyIdToken(idToken);
             validateEmail(token);
-            var authentication = new UsernamePasswordAuthenticationToken(
-                    new FirebaseUserPrincipal(token),
-                    null,
-                    new FirebaseUserPrincipal(token).getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
         } catch (FirebaseAuthException | IllegalArgumentException exception) {
             SecurityContextHolder.clearContext();
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or unauthorized Firebase token");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.getWriter().write("{\"message\":\"Invalid or unauthorized Firebase token\"}");
+            return;
         }
+
+        FirebaseUserPrincipal principal = new FirebaseUserPrincipal(token);
+        var authentication = new UsernamePasswordAuthenticationToken(
+                principal, null, principal.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        filterChain.doFilter(request, response);
     }
 
     private void validateEmail(FirebaseToken token) {

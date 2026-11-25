@@ -9,10 +9,18 @@ function escapeHtml(value) {
     return element.innerHTML;
 }
 
+function dateLabel(value) {
+    const date = value ? new Date(value) : null;
+    return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString() : "Date unavailable";
+}
+
 async function loadOwnedProjects() {
     try {
         const response = await authenticatedFetch("/api/projects/mine");
-        if (!response.ok) throw new Error(`Projects could not be loaded (HTTP ${response.status}).`);
+        if (!response.ok) {
+            const payload = await response.json().catch(() => null);
+            throw new Error(payload?.message || `Projects could not be loaded (HTTP ${response.status}).`);
+        }
         const projects = await response.json();
         if (!projects.length) {
             list.innerHTML = `
@@ -27,7 +35,11 @@ async function loadOwnedProjects() {
         const memberCounts = await Promise.all(projects.map(async project => {
             const response = await authenticatedFetch(
                 `/api/projects/${encodeURIComponent(project.projectId)}/member-count`);
-            return response.ok ? (await response.json()).count : 0;
+            if (!response.ok) {
+                const payload = await response.json().catch(() => null);
+                throw new Error(payload?.message || `Team details could not be loaded (HTTP ${response.status}).`);
+            }
+            return (await response.json()).count;
         }));
         list.innerHTML = projects.map((project, index) => `
             <article class="project-row">
@@ -35,7 +47,7 @@ async function loadOwnedProjects() {
                     <p class="project-meta">${escapeHtml(project.category)} / ${escapeHtml(project.department)}</p>
                     <h2>${escapeHtml(project.title)}</h2>
                     <p class="project-description">${escapeHtml(project.shortDescription)}</p>
-                    <p class="project-owner">Published ${new Date(project.createdAt).toLocaleDateString()}</p>
+                    <p class="project-owner">Published ${dateLabel(project.createdAt)}</p>
                 </div>
                 <div class="project-side">
                     <p class="project-meta">STATUS</p>
@@ -47,6 +59,7 @@ async function loadOwnedProjects() {
             </article>`).join("");
     } catch (error) {
         errorElement.textContent = error.message;
+        list.innerHTML = "";
     }
 }
 

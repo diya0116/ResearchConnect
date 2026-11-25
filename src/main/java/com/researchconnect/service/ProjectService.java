@@ -8,12 +8,18 @@ import com.researchconnect.enums.ProjectStatus;
 import com.researchconnect.repository.FirestoreProjectRepository;
 import java.time.Instant;
 import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProjectService {
@@ -35,7 +41,8 @@ public class ProjectService {
         validate(request);
         UserProfile owner = userService.findByUid(token.getUid());
         if (owner == null) {
-            throw new IllegalStateException("Complete your profile before creating a project");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Complete your profile before creating a project");
         }
 
         Instant now = Instant.now();
@@ -97,6 +104,18 @@ public class ProjectService {
             throw new IllegalStateException("Unable to read your projects", exception);
         } catch (ExecutionException exception) {
             throw new IllegalStateException("Unable to read your projects", exception);
+        }
+    }
+
+    public Map<String, Project> findByIds(Collection<String> projectIds) {
+        try {
+            return projectRepository.findByIds(projectIds).stream()
+                    .collect(Collectors.toMap(Project::projectId, Function.identity()));
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Unable to read project details", exception);
+        } catch (ExecutionException exception) {
+            throw new IllegalStateException("Unable to read project details", exception);
         }
     }
 
@@ -162,12 +181,10 @@ public class ProjectService {
     private Project requireOwnedProject(String ownerId, String projectId) {
         Project project = findById(projectId);
         if (project == null) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                    org.springframework.http.HttpStatus.NOT_FOUND, "Project not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
         }
         if (!ownerId.equals(project.ownerId())) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                    org.springframework.http.HttpStatus.FORBIDDEN, "You do not own this project");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this project");
         }
         return project;
     }

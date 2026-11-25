@@ -23,7 +23,7 @@ public class ApiExceptionHandler {
                 .map(error -> error.getDefaultMessage())
                 .orElse("Please check the submitted fields.");
         return ResponseEntity.badRequest().body(Map.of(
-                "message", "Please check the submitted fields.",
+                "message", message,
                 "fieldError", message
         ));
     }
@@ -40,13 +40,17 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, String>> state(IllegalStateException exception) {
-        log.error("Phase 2 API failure: {}", exception.getMessage(), exception);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", exception.getMessage()));
+        log.error("Application operation failed: {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message", "The request could not be completed. Please try again later."));
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, String>> responseStatus(ResponseStatusException exception) {
+        String reason = exception.getReason();
         return ResponseEntity.status(exception.getStatusCode())
-                .body(Map.of("message", exception.getReason()));
+                .body(Map.of("message", reason == null || reason.isBlank()
+                        ? "The request could not be completed."
+                        : reason));
     }
 }

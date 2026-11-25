@@ -2,14 +2,19 @@ import { authenticatedFetch } from "./firebase-session.js";
 
 const form = document.querySelector("#project-form");
 const errorElement = document.querySelector("#project-error");
+const submitButton = document.querySelector("#submit-project");
 const editing = window.location.pathname.endsWith("/edit");
 const projectId = editing ? window.location.pathname.split("/")[2] : null;
 
 async function loadProjectForEdit() {
     if (!editing) return;
+    submitButton.disabled = true;
     try {
         const response = await authenticatedFetch(`/api/projects/${encodeURIComponent(projectId)}`);
-        if (!response.ok) throw new Error("Project details could not be loaded.");
+        if (!response.ok) {
+            const payload = await response.json().catch(() => null);
+            throw new Error(payload?.message || payload?.detail || "Project details could not be loaded.");
+        }
         const project = await response.json();
         for (const [name, value] of Object.entries(project)) {
             const field = form.elements[name];
@@ -17,7 +22,8 @@ async function loadProjectForEdit() {
         }
         form.elements.requiredSkills.value = project.requiredSkills.join(", ");
         document.querySelector("#form-title").textContent = "Edit project";
-        document.querySelector("#submit-project").textContent = "Save changes";
+        submitButton.textContent = "Save changes";
+        submitButton.disabled = false;
     } catch (error) {
         errorElement.textContent = error.message;
     }
@@ -49,7 +55,6 @@ form.addEventListener("submit", async (event) => {
         return;
     }
 
-    const submitButton = form.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     try {
         const response = await authenticatedFetch(

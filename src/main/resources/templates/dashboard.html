@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | ResearchConnect</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/app">ResearchConnect</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+        <a href="/app">Explore Projects</a>
+        <a class="active" href="/dashboard">Dashboard</a>
+        <a href="/my-projects">My Projects</a>
+        <a href="/create-project">Create Project</a>
+    </nav>
+    <div class="topbar-actions">
+        <span class="profile-link" id="profile-link">Profile</span>
+        <button class="profile-link" id="sign-out" type="button">Sign out</button>
+    </div>
+</header>
+
+<main class="page-shell dashboard-page">
+    <section class="feed-heading">
+        <div>
+            <p class="eyebrow">YOUR RESEARCHCONNECT</p>
+            <h1>Dashboard</h1>
+        </div>
+    </section>
+    <p id="dashboard-error" class="form-error" aria-live="polite"></p>
+
+    <section class="dashboard-profile" aria-labelledby="dashboard-profile-heading">
+        <p class="eyebrow">PROFILE</p>
+        <h2 id="dashboard-profile-heading">Loading profile...</h2>
+        <dl class="profile-facts">
+            <div><dt>Email</dt><dd id="profile-email">—</dd></div>
+            <div><dt>Role</dt><dd id="profile-role">—</dd></div>
+            <div><dt>Department</dt><dd id="profile-department">—</dd></div>
+        </dl>
+    </section>
+
+    <section class="dashboard-stats" aria-label="Dashboard summary">
+        <div><span>Total projects</span><strong id="total-projects">—</strong></div>
+        <div><span>Active team memberships</span><strong id="active-memberships">—</strong></div>
+        <div><span>Incoming requests</span><strong id="incoming-count">—</strong></div>
+        <div><span>Outgoing requests</span><strong id="outgoing-count">—</strong></div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="owned-projects-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">PUBLISHED BY YOU</p><h2 id="owned-projects-heading">My projects</h2></div>
+            <a class="text-action" href="/my-projects">Open My Projects</a>
+        </div>
+        <div id="dashboard-projects" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading your projects...</p>
+        </div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="applications-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">YOUR REQUESTS</p><h2 id="applications-heading">My applications</h2></div>
+        </div>
+        <div id="dashboard-applications" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading your applications...</p>
+        </div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="incoming-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">PROJECTS YOU OWN</p><h2 id="incoming-heading">Incoming requests</h2></div>
+        </div>
+        <div id="dashboard-incoming" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading incoming requests...</p>
+        </div>
+    </section>
+
+    <section id="notifications" class="dashboard-section" aria-labelledby="notifications-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">UPDATES</p><h2 id="notifications-heading">Notifications</h2></div>
+        </div>
+        <div id="dashboard-notifications" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading notifications...</p>
+        </div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="teams-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">COLLABORATION</p><h2 id="teams-heading">Team membership</h2></div>
+        </div>
+        <div id="dashboard-teams" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading team memberships...</p>
+        </div>
+    </section>
+
+    <section class="dashboard-section" aria-labelledby="saved-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">FOR LATER</p><h2 id="saved-heading">Saved projects</h2></div>
+        </div>
+        <div id="dashboard-saved" class="dashboard-list" aria-live="polite">
+            <p class="muted">Loading saved projects...</p>
+        </div>
+    </section>
+</main>
+<script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
+    window.firebaseConfig = {
+        apiKey: /*[[${firebaseApiKey}]]*/ "",
+        authDomain: /*[[${firebaseAuthDomain}]]*/ "",
+        projectId: /*[[${firebaseProjectId}]]*/ "",
+        appId: /*[[${firebaseAppId}]]*/ ""
+    };
+</script>
+<script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>

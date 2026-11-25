@@ -4,6 +4,29 @@
 .settings
 target
 
+# Local environment and credentials
+.env
+.env.*
+.envrc
+*.env
+*.env.*
+*.local
+application-local.*
+**/application-local.*
+*service-account*.json
+*firebase-adminsdk*.json
+*credentials*.json
+*private*key*.json
+*secret*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.p8
+id_rsa*
+id_ed25519*
 .env
 .env.*
 *.env

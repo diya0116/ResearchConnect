@@ -11,16 +11,40 @@
     <a class="brand" href="/app">ResearchConnect</a>
     <nav class="main-nav" aria-label="Primary navigation">
         <a class="active" href="/app">Explore Projects</a>
+        <a href="/dashboard">Dashboard</a>
         <a href="/my-projects">My Projects</a>
         <a href="/create-project">Create Project</a>
     </nav>
-    <span class="profile-link" id="profile-link">Profile</span>
+    <div class="topbar-actions">
+        <span class="profile-link" id="profile-link">Profile</span>
+        <button class="profile-link" id="sign-out" type="button">Sign out</button>
+    </div>
 </header>
 <main class="page-shell detail-page">
     <a class="back-link" href="/app">Back to projects</a>
     <p id="detail-error" class="form-error" aria-live="polite"></p>
-    <article id="project-detail"></article>
+    <article id="project-detail">
+        <p class="muted">Loading project details...</p>
+    </article>
+    <section class="comments-section" aria-labelledby="comments-heading">
+        <div class="dashboard-section-heading">
+            <div><p class="eyebrow">DISCUSSION</p><h2 id="comments-heading">Project comments</h2></div>
+        </div>
+        <p id="comment-profile-message" class="muted" hidden>Complete your profile to add a comment.</p>
+        <form id="comment-form" class="comment-form" hidden>
+            <label for="comment-text">Add a comment</label>
+            <textarea id="comment-text" name="text" rows="4" maxlength="2000" required></textarea>
+            <div class="form-actions">
+                <button id="comment-submit" class="button button-dark" type="submit">Post comment</button>
+            </div>
+        </form>
+        <p id="comments-error" class="form-error" aria-live="polite"></p>
+        <div id="project-comments" class="comments-list" aria-live="polite">
+            <p class="muted">Loading comments...</p>
+        </div>
+    </section>
     <div id="project-management" class="form-actions detail-actions" hidden></div>
+    <div id="project-collaboration" class="form-actions detail-actions"></div>
 </main>
 <script th:inline="javascript" xmlns:th="http://www.thymeleaf.org">
     window.firebaseConfig = {

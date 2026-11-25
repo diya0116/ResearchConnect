@@ -138,3 +138,53 @@ GET    /api/projects/{projectId}/member-count
 The backend ignores any owner fields from edit requests, preserves `ownerId`,
 `ownerName`, `ownerRole`, `projectId`, and `createdAt`, and updates only editable
 fields plus `updatedAt`. Non-owners receive HTTP 403.
+
+## Phase 4: User dashboard
+
+The authenticated dashboard is available at `/dashboard`. It brings together the
+current user's profile, owned projects, join applications, accepted memberships and
+saved projects. Project and user IDs are derived from the verified Firebase token;
+the browser cannot select another user's dashboard data or make owner decisions.
+
+Dashboard and collaboration API:
+
+```text
+GET    /api/dashboard
+POST   /api/projects/{projectId}/applications
+GET    /api/projects/{projectId}/applications/mine
+PATCH  /api/applications/{applicationId}/decision
+GET    /api/projects/{projectId}/saved
+PUT    /api/projects/{projectId}/saved
+DELETE /api/projects/{projectId}/saved
+```
+
+Applications are stored in `project_applications`. Decisions are rechecked
+transactionally against the current project owner and available capacity; accepting
+a request creates an accepted `project_members` record and decreases available
+positions atomically. Saved projects are stored per user in `saved_projects`.
+
+## Phase 5: Basic collaboration and notifications
+
+Authenticated students and professors with completed profiles can comment on project
+pages. Comment authors may delete their own comments, and the project owner may
+moderate comments on that project. Comment identity and role are read from the
+authenticated user's Firestore profile.
+
+Join-request submissions notify the project owner; accepted or rejected decisions
+notify the applicant. Notifications are stored in the `notifications` collection and
+are visible only to their recipient. The dashboard lists notifications and allows
+the recipient to mark them as read. Project comments are stored in
+`project_comments`.
+
+Additional API endpoints:
+
+```text
+GET    /api/projects/{projectId}/comments
+POST   /api/projects/{projectId}/comments
+DELETE /api/projects/{projectId}/comments/{commentId}
+GET    /api/notifications
+PATCH  /api/notifications/{notificationId}/read
+```
+
+Saved projects continue to use the Phase 4 `saved_projects` collection and existing
+save, remove, and dashboard flows.

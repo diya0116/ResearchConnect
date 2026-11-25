@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/onboarding", "/app", "/my-projects",
+                        .requestMatchers("/", "/login", "/onboarding", "/app", "/dashboard", "/my-projects",
                                 "/projects", "/projects/**", "/create-project", "/css/**", "/js/**", "/error")
                         .permitAll()
                         .requestMatchers("/api/auth/**").authenticated()
